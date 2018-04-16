@@ -42,10 +42,15 @@ MAIN PROC
   MOV DL, 0AH
   INT 21H ;ADDED NEW LINE
   
+  ADD CH , CL
+  SUB CL , CH
+  ADD CH , CL
+  NEG CL
   
-  MOV BH , CH
-  MOV CH , CL
-  MOV CL , BH
+
+  ;MOV BH , CH
+  ;MOV CH , CL
+  ;MOV CL , BH
   
   MOV AH , 2
   MOV DL , CH
