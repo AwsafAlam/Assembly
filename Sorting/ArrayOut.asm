@@ -6,79 +6,12 @@
 
     PROMPT1 DB 'Enter Input Array: $'
     
-    W DW ?
+    W DB 1,3,45,6
 
     
 
 .CODE
 
-INPUT PROC
-    PUSH BX
-    PUSH CX
-    PUSH DX
-    
-    XOR BX , BX
-    XOR CX , CX
-    
-@BEGIN: 
-    
-    
-    MOV AH , 1
-    INT 21H
-    
-    CMP AL , '-'
-    JE @MINUS
-    CMP AL , '+'
-    JE @PLUS
-    
-    JMP @GET_NUMBER
-    
-@MINUS:
-    MOV CX , 1
-@PLUS:
-    INT 21H ;READ ANOTHER CHAR
-@GET_NUMBER:
-    CMP AL , '0'
-    JNGE @NOT_DIGIT ;ILLEGAL
-    CMP AL , '9'
-    JNLE @NOT_DIGIT
-    
-    XOR AH , AH
-    SUB AX , 48
-    PUSH AX
-    
-    MOV AX, 10
-    MUL BX
-    POP BX        
-    ADD BX , AX
-    
-    JMP @BEGIN
-    
-    OR CX, CX ; NEGATIVE NUMBER
-    JE @BEGIN
-    NEG BX
-
-@NOT_DIGIT:
-    CMP AL , 'x'
-    JE @EXIT
-    
-    
-    
-    CMP AL , ' '
-    JNE @EXIT
-        
-    
-@INSERT_IN_ARRAY:
-    MOV [SI] , BX
-    ADD SI , 2
-    XOR BX , BX
-    XOR CX , CX
-    JMP @BEGIN
-
-@EXIT:
-    RET    
-            
-INPUT ENDP
 
 MAIN PROC
     
@@ -91,20 +24,27 @@ MAIN PROC
     INT 21H
     
      
-     XOR AX , AX
-     LEA SI , W
-     MOV BX , 5
+    XOR AX , AX
+    LEA SI , W
+    MOV BX , 4
      
-     CALL INPUT
-     LEA SI , W
-     MOV AX , [SI]
-      
-
-    PUSH AX
-    PUSH BX
-    PUSH CX
-    PUSH DX
-  
+    MOV CL , [SI]
+   
+   PRINT:
+    DEC BX  
+    MOV AH , 2
+    MOV DL ,CL
+    ADD DL , 48
+    INT 21H
+    
+    MOV DL ,' '
+    INT 21H
+    
+    ADD SI , 2
+    MOV CL , [SI]
+    CMP BX , 0
+    JNE PRINT
+    
   @BEGIN_OUT:  
     ;MOV AX , [SI]
      
